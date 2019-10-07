@@ -14,14 +14,15 @@ router.get('/', (req,res) => {
 
 
 /* SQL Query */
-var sql_query = 'SELECT username FROM users WHERE username = ';
+var sql_query = 'SELECT * FROM users WHERE';
+var sql_query2 = 'SELECT email FROM users WHERE email = ';
 
 router.post('/signup', (req, res) => {
-    var check_username_query = sql_query +"'" + req.body.username + "'" +';';
+    var check_username_query = sql_query +" username = '" + req.body.username + "' OR email = '"+ req.body.email + "'" +';';
     pool.query(check_username_query, (err, data) => {
         if(err){
             res.json({
-                message : "Error!"
+                message : 'ERROR'
             }); 
         }
         else if(data.rows.length == 0) {
@@ -31,10 +32,10 @@ router.post('/signup', (req, res) => {
         }
         else if(data.rows.length > 0) {
             res.json({
-                message: 'User exist in database'
+                message: 'Username/email exist in database'
             });
         }
-	});
+    });
 });
 
 module.exports = router;
