@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+/* --- V7: Using dotenv     --- */
+require('dotenv').config();
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -19,6 +22,17 @@ var loopsRouter = require('./routes/loops');
 /* --- V4: Database Connect --- */
 var selectRouter = require('./routes/select');
 /* ---------------------------- */
+
+/* --- V5: Adding Forms     --- */
+var formsRouter = require('./routes/forms');
+/* ---------------------------- */
+
+/* --- V6: Modify Database  --- */
+var insertRouter = require('./routes/insert');
+/* ---------------------------- */
+
+var auth =  require('./auth');
+
 
 var app = express();
 
@@ -47,6 +61,19 @@ app.use('/loops', loopsRouter);
 /* --- V4: Database Connect --- */
 app.use('/select', selectRouter);
 /* ---------------------------- */
+
+/* --- V5: Adding Forms     --- */
+app.use('/forms', formsRouter);
+/* ---------------------------- */
+
+/* --- V6: Modify Database  --- */
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/insert', insertRouter);
+/* ---------------------------- */
+
+app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
