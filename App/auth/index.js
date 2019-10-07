@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const { Pool } = require('pg')
 const pool = new Pool({
@@ -32,7 +32,6 @@ router.post('/signup', (req, res) => {
                 
                 //add user to database
                 var username = req.body.username;
-                var password = hash;
                 var gender = req.body.gender;
                 var phone_num = req.body.phone_num;
                 var email = req.body.email;
@@ -51,6 +50,45 @@ router.post('/signup', (req, res) => {
             res.json({
                 message: 'Username/email exist in database'
             });
+        }
+    });
+});
+
+router.post('/login', (req, res) => {
+    var check_username_query = sql_query +" username = '" + req.body.username + "';";
+    pool.query(check_username_query, (err, data) => {
+        if(err){
+            res.json({
+                message : 'ERROR'
+            }); 
+        }
+        //username found
+        else if(data.rows.length == 1) {
+            //compare password if they are valid
+            bcrypt.compare(req.body.password, data.rows[0].password)
+            .then((result) => {
+                if (result) {
+                    //setting the set-cookie header
+                    const isSecure = req.app.get('env') != 'development';
+                    res.cookie('user_id', data.rows[0].username, {
+                        httpOnly: true,
+                        secure: isSecure,
+                        signed: true
+                    });
+                    res.json({
+                        message : 'Logged in!'
+                    }); 
+                } else {
+                    res.json({
+                        message : 'Invalid Login'
+                    });
+                }
+            });
+        }
+        else {
+            res.json({
+                message : 'Invalid login'
+            }); 
         }
     });
 });
