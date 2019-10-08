@@ -32,6 +32,7 @@ var insertRouter = require('./routes/insert');
 /* ---------------------------- */
 
 var auth =  require('./auth');
+var signup =  require('./auth/signup');
 
 
 var app = express();
@@ -74,6 +75,7 @@ app.use('/insert', insertRouter);
 /* ---------------------------- */
 
 app.use('/auth', auth);
+app.use('/auth/signup',signup);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -16,15 +16,6 @@
   <body>
     <h1>CS2102: <%= title%></h1>
       <input type=button class="btn btn-primary" onClick="location.href='../auth'" value='Log in'>
-      <script>
-        (function() {
-          window.addEventListener('load', function() {
-            var forms = [document.getElementById('html_form')];
-            var validation = Array.prototype.filter.call(forms, function(form) {
-              form.addEventListener('submit', check, false);
-            });
-          }, false);
-        })();
-      </script>
+      <input type=button class="btn btn-primary" onClick="location.href='../auth/signup'" value='Sign Up'>
     </body>
 </html>
