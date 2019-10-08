@@ -7,11 +7,9 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL
 });
 
-router.get('/', (req,res) => {
-    res.json({
-        message: '🔐'
-    });
-});
+router.get('/', function(req, res, next) {
+    res.render('auth_login', { title: 'Login' });
+  });
 
 
 /* SQL Query */
