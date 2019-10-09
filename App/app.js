@@ -33,6 +33,7 @@ var insertRouter = require('./routes/insert');
 
 var login =  require('./auth/login');
 var signup =  require('./auth/signup');
+var authMiddleware = require('./auth/middleware');
 
 
 var app = express();
@@ -60,7 +61,7 @@ app.use('/loops', loopsRouter);
 /* ---------------------------- */
 
 /* --- V4: Database Connect --- */
-app.use('/select', selectRouter);
+app.use('/select', authMiddleware.ensureLoggedIn ,selectRouter);
 /* ---------------------------- */
 
 /* --- V5: Adding Forms     --- */
