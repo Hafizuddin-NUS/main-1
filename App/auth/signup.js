@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 var sql_query = 'SELECT * FROM users WHERE';
 var add_user_query = 'INSERT INTO users VALUES';
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
     var check_username_query = sql_query +" username = '" + req.body.username + "' OR email = '"+ req.body.email + "'" +';';
     pool.query(check_username_query, (err, data) => {
         if(err){
@@ -44,9 +44,7 @@ router.post('/', (req, res) => {
             });
         }
         else if(data.rows.length > 0) {
-            res.json({
-                message: 'Username/email exist in database'
-            });
+            next(new Error('Username/email already exist.'));
         }
     });
 });
